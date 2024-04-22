@@ -24,6 +24,8 @@ Hvorfor bruke en algoritme? (1.)
 = Metode
 Hvordan vi kom fram til våre egne tallresultater
 
+Kan bli såpass lite å skrive her at det bare er å inkludere i de andre delene.
+
 = Resultater
 Tabeller, plott og andre resultater fra koden. 
 
