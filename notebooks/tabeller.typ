@@ -1,4 +1,4 @@
-#set page(flipped: true)
+#set page(flipped: true, background: none)
 #set text(size: 24pt)
 #import "template.typ": num_to_str
 #let tabell(fil) = {
