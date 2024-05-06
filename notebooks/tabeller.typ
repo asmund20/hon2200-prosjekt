@@ -1,6 +1,6 @@
 #set page(flipped: true, background: none)
 #set text(size: 24pt)
-#import "template.typ": num_to_str
+#import "@local/num_to_str:1.0.0": num_to_str
 #let tabell(fil) = {
   let data = csv(fil)
 
