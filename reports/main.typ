@@ -6,7 +6,7 @@
   authors: ("Bjarte Holgersen", "Cecilie Sivertsen Rønnestad", "Sadaf Samin Dar", "Simon Lyng-Jørgensen", "Åsmund Olai Sand-Larsen"),
   language: "nb",
   include_outline: true,
-  logo: image("reports/uio-logo.png", width: 60%)
+  logo: image("uio-logo.png", width: 60%)
 )
 
 #set heading(numbering: "1.")
@@ -85,7 +85,7 @@ Fra formelen ser vi at $P(A|B)$, altså sannsynligheten for at en person gjentar
     ..for line in data.slice(1) {
       for (i, s) in line.enumerate() {
         if s.at(0, default: "1") == "0" {
-          line.at(i) = num_to_str(s, digits: 4)
+          line.at(i) = num_to_str(s, digits: 2)
         }
       }
       line
@@ -94,44 +94,54 @@ Fra formelen ser vi at $P(A|B)$, altså sannsynligheten for at en person gjentar
 }
 = Resultater
 #figure(
-  image("notebooks/h_all.svg", width: 90%),
+  image("resultat-filer/h_all.svg", width: 90%),
   caption: [Noe bra caption her]
 )
 #figure(
-  image("notebooks/h_b.svg", width: 90%),
+  image("resultat-filer/h_b.svg", width: 90%),
   caption: [Noe bra caption her]
 )
 
 #figure(
-  image("notebooks/h_c.svg", width: 90%),
+  image("resultat-filer/h_c.svg", width: 90%),
   caption: [Noe bra caption her]
 )
 #figure(
-  tabell("notebooks/tt_b"),
+  tabell("resultat-filer/tt_b"),
   caption: [Noe bra caption her]
 ) <tt:b>
 
 #figure(
-  tabell("notebooks/tt_c"),
+  tabell("resultat-filer/tt_c"),
   caption: [Noe bra caption her]
 ) <tt:c>
 
 #figure(
-  tabell("notebooks/tt_all"),
+  tabell("resultat-filer/tt_f"),
+  caption: [Noe bra caption her]
+) <tt:f>
+
+#figure(
+  tabell("resultat-filer/tt_m"),
+  caption: [Noe bra caption her]
+) <tt:m>
+
+#figure(
+  tabell("resultat-filer/tt_all"),
   caption: [Noe bra caption her]
 ) <tt:all>
 
-#let data = csv("notebooks/recid_rates")
+#let data = csv("resultat-filer/recid_rates")
 #figure(
   table(
-    columns: 4,
+    columns: 5,
     inset: 6pt,
-    [*Risiko-score*], [*African-American*], [*Caucasian*], [*Relativ forskjell*],
-    ..for (s, a, c) in data {
-        (strong(s), num_to_str(a, digits: 3), num_to_str(c, digits: 3), num_to_str((float(a) - float(c))/float(c), digits: 5))
+    [*Risiko-score*], [*ALL*], [*African-American*], [*Caucasian*], [*Relativ forskjell*],
+    ..for (s, all, a, c) in data {
+        (strong(s),num_to_str(all, digits: 3), num_to_str(a, digits: 3), num_to_str(c, digits: 3), num_to_str((float(a) - float(c))/float(c), digits: 5))
       }
   ),
-  caption: [Raten for residivisme etter risiko-score. Relativ forskjell mellom *African-American* ($a$) og *Caucasian* ($c$) er beregnet ved $(a-c)/c$.]
+  caption: [Raten for residivisme for de forskjellige risiko-scorene. Relativ forskjell mellom *African-American* ($a$) og *Caucasian* ($c$) er beregnet ved $(a-c)/c$.]
 )
 
 
