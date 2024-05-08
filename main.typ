@@ -1,12 +1,15 @@
 #import "@local/num_to_str:1.0.0": num_to_str
-#import "@local/rapport:1.0.0": rapport
+#import "@local/rapport:1.0.1": rapport
 
 #show: rapport.with(
   title: [Analyse av COMPAS],
   authors: ("Bjarte Holgersen", "Cecilie Sivertsen Rønnestad", "Sadaf Samin Dar", "Simon Lyng-Jørgensen", "Åsmund Olai Sand-Larsen"),
   language: "nb",
-  include_outline: true
+  include_outline: true,
+  logo: image("reports/uio-logo.png", width: 60%)
 )
+
+#set heading(numbering: "1.")
 
 = Introduksjon
 I 2016 utga ProPublica en analyse av Northpoint sin algoritme ved navn COMPAS. COMPAS brukes i det amerikanske rettsvesenet for å vurdere hvorvidt siktede skal varetektsfengsles, prøveløslates eller forvares. Algoritmen gir en risikovurdering basert på statistisk analyse av data, og dommere bruker denne vurderingen som en ressurs for å ta beslutninger i rettsvesenet.
@@ -91,6 +94,19 @@ Fra formelen ser vi at $P(A|B)$, altså sannsynligheten for at en person gjentar
 }
 = Resultater
 #figure(
+  image("notebooks/h_all.svg", width: 90%),
+  caption: [Noe bra caption her]
+)
+#figure(
+  image("notebooks/h_b.svg", width: 90%),
+  caption: [Noe bra caption her]
+)
+
+#figure(
+  image("notebooks/h_c.svg", width: 90%),
+  caption: [Noe bra caption her]
+)
+#figure(
   tabell("notebooks/tt_b"),
   caption: [Noe bra caption her]
 ) <tt:b>
@@ -105,11 +121,24 @@ Fra formelen ser vi at $P(A|B)$, altså sannsynligheten for at en person gjentar
   caption: [Noe bra caption her]
 ) <tt:all>
 
+#let data = csv("notebooks/recid_rates")
+#figure(
+  table(
+    columns: 4,
+    inset: 6pt,
+    [*Risiko-score*], [*African-American*], [*Caucasian*], [*Relativ forskjell*],
+    ..for (s, a, c) in data {
+        (strong(s), num_to_str(a, digits: 3), num_to_str(c, digits: 3), num_to_str((float(a) - float(c))/float(c), digits: 5))
+      }
+  ),
+  caption: [Raten for residivisme etter risiko-score. Relativ forskjell mellom *African-American* ($a$) og *Caucasian* ($c$) er beregnet ved $(a-c)/c$.]
+)
+
 
 = Diskusjon
 == Våre funn
 
-== Northpointe vs ProPUblica
+== Northpointe vs ProPublica
 ProPublica har publisert en studie som hevder at COMPAS diskriminerer afro-amerikanere. Northpointe på sin side har kommet med et tilsvar som hevder at COMPAS ikke diskriminerer. For å forstå kjernen av uenigheten mellom Northpointe og ProPublica er det først viktig å forstå hva begge partene hevder, på hvilke punkter er de enige og på hvilke punkter er de uenige.
 
 ProPublica fant at algoritmen predikerer sannsynligheten for å «reoffend», altså gjøre en kriminell handling på nytt når du tidligere har blitt arrestert for en kriminell handling, til å være like nøyaktig for både afro-amerikanere og hvite kriminelle. Sannsynligheten for at algoritmen predikerte riktig var 66 % for afro-amerikanere og 59 % for hvite. Dette mener Northpointe er et viktig poeng, fordi det viser en likestilling i nøyaktigheten av modellen. Uenigheten ligger i at ProPublica hevder at det er store forskjeller i algoritmen i de tilfellene den tar _feil_.
