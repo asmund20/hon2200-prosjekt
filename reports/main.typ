@@ -9,6 +9,7 @@
   logo: image("uio-logo.png", width: 60%)
 )
 
+// #show figure: set block(breakable: true)
 #set heading(numbering: "1.")
 
 = Introduksjon
@@ -76,11 +77,13 @@ Fra formelen ser vi at $P(A|B)$, altså sannsynligheten for at en person gjentar
 
 #let tabell(fil) = {
   let data = csv(fil)
+  set par(justify: false)
 
   table(
     columns: 3,
+    align: horizon,
     inset: 6pt,
-    [], ..data.at(0).slice(1).map(strong),
+    strong(data.at(0).at(0)), ..data.at(0).slice(1).map(strong),
     ..for line in data.slice(1) {
       for (i, s) in line.enumerate() {
         if s.at(0, default: "1") == "0" {
@@ -96,42 +99,62 @@ Fra formelen ser vi at $P(A|B)$, altså sannsynligheten for at en person gjentar
 }
 = Resultater
 #figure(
-  image("resultat-filer/h_all.svg", width: 90%),
-  caption: [Noe bra caption her]
-)
-#figure(
-  image("resultat-filer/h_b.svg", width: 90%),
-  caption: [Noe bra caption her]
+  image("resultat-filer/recidivism.svg", width: 70%),
+  caption: [Residivismerater for noen undergrupper i datasettet (øverst) og raten av predikert residivisme fra GRRS (nederst). Det er antatt at en ikke-lav risiko-score (tilsvarer desil 5-10) er predikert til å residivere.]
 )
 
 #figure(
-  image("resultat-filer/h_c.svg", width: 90%),
-  caption: [Noe bra caption her]
-)
-#figure(
-  tabell("resultat-filer/tt_b"),
-  caption: [Noe bra caption her]
-) <tt:b>
+  grid(
+    columns: 2,
+    grid.cell(colspan: 2, image("resultat-filer/h_all.svg", width: 60%)),
+    image("resultat-filer/h_b.svg"),
+    image("resultat-filer/h_c.svg"),
+  ),
+  caption: [Det som ble predikert av GRRS for hele datasettet (øverst), afroamerikanere (venstre) og hvite (høyre).]
+) <fig:predicted>
 
 #figure(
-  tabell("resultat-filer/tt_c"),
-  caption: [Noe bra caption her]
-) <tt:c>
+  grid(
+    columns: 2,
+    grid.cell(colspan: 2, image("resultat-filer/r_h_all.svg", width: 60%)),
+    image("resultat-filer/r_h_b.svg"),
+    image("resultat-filer/r_h_c.svg"),
+  ),
+  caption: [Det som ble predikert av GRRS, gitt residivisme,  for hele datasettet (øverst), afroamerikanere (venstre) og hvite (høyre).]
+) <fig:predicted>
 
 #figure(
-  tabell("resultat-filer/tt_f"),
-  caption: [Noe bra caption her]
-) <tt:f>
-
-#figure(
-  tabell("resultat-filer/tt_m"),
-  caption: [Noe bra caption her]
-) <tt:m>
+  grid(
+    columns: 2,
+    grid.cell(colspan: 2, image("resultat-filer/nr_h_all.svg", width: 60%)),
+    image("resultat-filer/nr_h_b.svg"),
+    image("resultat-filer/nr_h_c.svg"),
+  ),
+  caption: [Det som ble predikert av GRRS, gitt ingen residivisme,  for hele datasettet (øverst), afroamerikanere (venstre) og hvite (høyre).]
+) <fig:predicted>
 
 #figure(
   tabell("resultat-filer/tt_all"),
-  caption: [Noe bra caption her]
-) <tt:all>
+  caption: [Sannhetstabell for hele datasettet. Det er her antatt at en ikke-lav prediksjonstekst (tilsvarer desi-score 5-10) er at algoritmen predikerer residivisme, og sannhetstabellen er deretter beregnet som vanlig ved binær klassifisering.]
+) <tab:truth_table_all>
+
+#figure(
+  kind: table,
+  grid(
+    columns: 2,
+    gutter: 4pt,
+    tabell("resultat-filer/tt_b"),
+    tabell("resultat-filer/tt_c"),
+    tabell("resultat-filer/tt_f"),
+    tabell("resultat-filer/tt_m"),
+  ),
+  caption: [Sannhetstabell for undergruppene afroamerikanere (oppe til venstre), hvite (oppe til høyre), kvinner (nede til venstre) og menn (nede til høyre). Som i @tab:truth_table_all, er det antatt at en ikke-lav prediksjonstekst er predikert residivisme og sannhetstabellene er deretter beregnet som vanlig ved binær klassifisering.]
+) <tab:truth_table_groups>
+
+#figure(
+  image("resultat-filer/coef.svg", width: 60%),
+  caption: []
+)
 
 #let data = csv("resultat-filer/recid_rates")
 #figure(
@@ -143,14 +166,14 @@ Fra formelen ser vi at $P(A|B)$, altså sannsynligheten for at en person gjentar
         (strong(s),num_to_str(all, digits: 3), num_to_str(a, digits: 3), num_to_str(c, digits: 3), num_to_str((float(a) - float(c))/float(c), digits: 5))
       }
   ),
-  caption: [Raten for residivisme for de forskjellige risiko-scorene. Relativ forskjell mellom *African-American* ($a$) og *Caucasian* ($c$) er beregnet ved $(a-c)/c$.]
-) <tab:redid_rates>
+  caption: [Raten for residivisme for de forskjellige risiko-scorene. Altså er hvert tall her residivisme-raten for de i datasettet som er tilhører gruppen (kolonne) og som fikk scoren av GRRS (raden). Relativ forskjell mellom *African-American* ($a$) og *Caucasian* ($c$) er beregnet ved $(a-c)/c$.]
+) <tab:recid_rates>
 
 #figure(
   image(
     "resultat-filer/recid_rates.svg"
   ),
-  caption: [Residivisme-rater, samme data som i @tab:redid_rates men her også med kvinner og menn.]
+  caption: [Residivisme-rater ved de forskjellige desil-scorene, samme data som i @tab:recid_rates men her også med kvinner og menn.]
 )
 
 
