@@ -78,15 +78,17 @@ Fra formelen ser vi at $P(A|B)$, altså sannsynligheten for at en person gjentar
   let data = csv(fil)
 
   table(
-    columns: 4,
+    columns: 3,
     inset: 6pt,
-    table.cell(colspan: 4, align: center)[Truth table for #data.at(0).at(0)],
-    [], ..data.at(0).slice(1),
+    [], ..data.at(0).slice(1).map(strong),
     ..for line in data.slice(1) {
       for (i, s) in line.enumerate() {
         if s.at(0, default: "1") == "0" {
           line.at(i) = num_to_str(s, digits: 2)
         }
+        else {
+            line.at(i) = strong(s)
+          }
       }
       line
     }
@@ -136,12 +138,19 @@ Fra formelen ser vi at $P(A|B)$, altså sannsynligheten for at en person gjentar
   table(
     columns: 5,
     inset: 6pt,
-    [*Risiko-score*], [*ALL*], [*African-American*], [*Caucasian*], [*Relativ forskjell*],
-    ..for (s, all, a, c) in data {
+    [*Risiko-score*], [*All*], [*African-American*], [*Caucasian*], [*Relativ forskjell*],
+    ..for (s, all, a, c, m, f) in data {
         (strong(s),num_to_str(all, digits: 3), num_to_str(a, digits: 3), num_to_str(c, digits: 3), num_to_str((float(a) - float(c))/float(c), digits: 5))
       }
   ),
   caption: [Raten for residivisme for de forskjellige risiko-scorene. Relativ forskjell mellom *African-American* ($a$) og *Caucasian* ($c$) er beregnet ved $(a-c)/c$.]
+) <tab:redid_rates>
+
+#figure(
+  image(
+    "resultat-filer/recid_rates.svg"
+  ),
+  caption: [Residivisme-rater, samme data som i @tab:redid_rates men her også med kvinner og menn.]
 )
 
 
